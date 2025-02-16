@@ -1,0 +1,20 @@
+#!/bin/bash
+
+PACKAGENAME=$1
+
+if [ ! -f /opt/$BASEPATH_DIR/versions/deps/python-$PACKAGENAME.spec ]; then
+	if [ ! -f /opt/$BASEPATH_DIR/versions/deps/python3-$PACKAGENAME.spec ]; then
+		echo "Package $PACKAGENAME doesn't exist"
+		exit 0
+	else
+		FILENAME=python3-$PACKAGENAME
+	fi
+else
+	FILENAME=python-$PACKAGENAME
+fi
+
+
+
+sed -i '1i%global debug_package %{nil}' /opt/$BASEPATH_DIR/versions/deps/$FILENAME.spec
+
+/opt/$BASEPATH_DIR/scripts/buildsrc $FILENAME

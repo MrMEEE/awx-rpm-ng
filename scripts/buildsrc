@@ -1,0 +1,37 @@
+#!/bin/bash
+source $(dirname "$0")/common-functions
+
+VERSION=$(get_version)
+
+PACKAGE=$1
+
+if [ ! -d "/opt/$BASEPATH_DIR/versions/deps" ]; then
+        echo "SPECs for version $VERSION not generated"
+        exit 1
+fi
+
+if [ -d "/opt/$BASEPATH_DIR/rpmbuilds/$VERSION/SRPMS" ] && [ "$PACKAGE" == "" ]; then
+	if [ "$PACKAGE" != "force" ]; then
+		echo "SRPMs already generated, apply force to regenerate"
+		exit
+	else
+		rm -rf "/opt/$BASEPATH_DIR/rpmbuilds/$VERSION/SRPMS"
+	fi 
+fi
+
+cd "/opt/$BASEPATH_DIR/versions/deps/"
+
+if [[ ${PACKAGE} != "" ]] && [[ ${PACKAGE} != "force" ]];then
+	echo "Building SRPM for $PACKAGE for version $VERSION"
+	if [ -f $PACKAGE.spec ];then
+                rpmbuild -bs --define "_topdir /opt/$BASEPATH_DIR/rpmbuilds/$VERSION/" $PACKAGE.spec
+        else
+		rpmbuild -bs --define "_topdir /opt/$BASEPATH_DIR/rpmbuilds/$VERSION/" python-$PACKAGE.spec
+	fi
+	exit 0
+fi
+
+for i in `ls *.spec`;do 
+	echo "Building SRPMS for version $VERSION"
+	rpmbuild -bs --define "_topdir /opt/$BASEPATH_DIR/rpmbuilds/$VERSION/" $i 
+done

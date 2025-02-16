@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+  - name: Test
+    debug:
+      var: "{{ item }}"
+    with_list: "{{ awx_rpm_allowedhosts }}"
+    when: awx_rpm_allowedhosts is defined

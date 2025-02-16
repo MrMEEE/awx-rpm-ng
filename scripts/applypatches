@@ -1,0 +1,9 @@
+cd /opt/$BASEPATH_DIR/versions/deps/
+mkdir -p /opt/$BASEPATH_DIR/migration/applied
+
+for i in `ls /opt/$BASEPATH_DIR/migration/patch/`; do
+
+	patch -p1 < /opt/$BASEPATH_DIR/migration/patch/$i
+	mv /opt/$BASEPATH_DIR/migration/patch/$i /opt/$BASEPATH_DIR/migration/applied/
+
+done
