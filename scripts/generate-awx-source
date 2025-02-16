@@ -9,17 +9,17 @@ DATE=$(date +"%a %b %d %Y %r %Z %z")
 
 echo "Generating source and build for AWX-RPM version: $VERSION"
 
-cd /opt/$BASEPATH_DIR/
+cd $BASEPATH_DIR/
 
-cp /opt/$BASEPATH_DIR/versions/awx-rpm/*$VERSION* /opt/$BASEPATH_DIR/rpmbuilds/$VERSION/SOURCES/
+cp $BASEPATH_DIR/versions/awx-rpm/*$VERSION* $BASEPATH_DIR/rpmbuilds/$VERSION/SOURCES/
 
 if [[ "$1" != "nosource" ]]; then
-	tar zcf /opt/$BASEPATH_DIR/rpmbuilds/$VERSION/SOURCES/awx-$VERSION.tar.gz awx/
+	tar zcf $BASEPATH_DIR/rpmbuilds/$VERSION/SOURCES/awx-$VERSION.tar.gz awx/
 fi
 
-cd /opt/$BASEPATH_DIR/rpmbuilds/$VERSION/RPMS/
+cd $BASEPATH_DIR/rpmbuilds/$VERSION/RPMS/
 
-BUILDVERSION=$(cat /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec |grep Release: | awk '{ print $2}' | cut -f1 -d%)
+BUILDVERSION=$(cat $BASEPATH_DIR/versions/deps/awx-rpm.spec |grep Release: | awk '{ print $2}' | cut -f1 -d%)
 
 if [[ "$BUILDVERSION" == "" ]];then
         NEWBUILDVERSION=1
@@ -40,7 +40,7 @@ done
 
 RHELDEPS="Requires: "
 
-for i in `cat /opt/$BASEPATH_DIR/versions/deps/rhel-deps.txt`; do
+for i in `cat $BASEPATH_DIR/versions/deps/rhel-deps.txt`; do
 
 	RHELDEPS=$RHELDEPS$(echo $i | sed "s/python-/python$PYTHONBUILD-/g")" "
 	echo $i | sed "s/python-/python3-/g" >> /var/www/html/AWX-RPM/excludelists/awx-rpm-$VERSION-$NEWBUILDVERSION.el9
@@ -49,19 +49,19 @@ done
 
 DEPS=$DEPS$RHELDEPS
 BUILDDEPS=$BUILDDEPS$"Build"$RHELDEPS
-LASTVERSION=$(cd /opt/$BASEPATH_DIR/versions/ && git branch | sed 's/*/ /g' |grep -B 1 "$VERSION" | head -1)
-CHANGELOG=$(cd /opt/$BASEPATH_DIR/awx/ && git log --oneline --decorate $LASTVERSION..$VERSION | cut -d" " -f2- | sed -e "s/^/- /g" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/\$/\\$/g')
-cp /opt/$BASEPATH_DIR/templates/awx-rpm-temp.spec /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
+LASTVERSION=$(cd $BASEPATH_DIR/versions/ && git branch | sed 's/*/ /g' |grep -B 1 "$VERSION" | head -1)
+CHANGELOG=$(cd $BASEPATH_DIR/awx/ && git log --oneline --decorate $LASTVERSION..$VERSION | cut -d" " -f2- | sed -e "s/^/- /g" | sed ':a;N;$!ba;s/\n/\\n/g' | sed 's/\$/\\$/g')
+cp $BASEPATH_DIR/templates/awx-rpm-temp.spec $BASEPATH_DIR/versions/deps/awx-rpm.spec
 
-sed -i "s/Release:.*$/Release: $NEWBUILDVERSION%{dist}/g" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
+sed -i "s/Release:.*$/Release: $NEWBUILDVERSION%{dist}/g" $BASEPATH_DIR/versions/deps/awx-rpm.spec
 
-sed -i "s|¤BUILDREQUIRES¤|$BUILDDEPS|g" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
-sed -i "s|¤REQUIRES¤|$DEPS|g" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
-sed -i "s|¤VERSION¤|$VERSION|g" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
-sed -i "s|¤DATE¤|$DATE|g" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
-sed -i "s|¤CHANGELOG¤|$CHANGELOG|g" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
-sed -i "s|¤PYTHON3PKGVERSION¤|$PYTHONBUILD|g" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
-sed -i "s|\r|\n|g" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
+sed -i "s|¤BUILDREQUIRES¤|$BUILDDEPS|g" $BASEPATH_DIR/versions/deps/awx-rpm.spec
+sed -i "s|¤REQUIRES¤|$DEPS|g" $BASEPATH_DIR/versions/deps/awx-rpm.spec
+sed -i "s|¤VERSION¤|$VERSION|g" $BASEPATH_DIR/versions/deps/awx-rpm.spec
+sed -i "s|¤DATE¤|$DATE|g" $BASEPATH_DIR/versions/deps/awx-rpm.spec
+sed -i "s|¤CHANGELOG¤|$CHANGELOG|g" $BASEPATH_DIR/versions/deps/awx-rpm.spec
+sed -i "s|¤PYTHON3PKGVERSION¤|$PYTHONBUILD|g" $BASEPATH_DIR/versions/deps/awx-rpm.spec
+sed -i "s|\r|\n|g" $BASEPATH_DIR/versions/deps/awx-rpm.spec
 
-rpmbuild -bs --define "_topdir /opt/$BASEPATH_DIR/rpmbuilds/$VERSION/" /opt/$BASEPATH_DIR/versions/deps/awx-rpm.spec
+rpmbuild -bs --define "_topdir $BASEPATH_DIR/rpmbuilds/$VERSION/" $BASEPATH_DIR/versions/deps/awx-rpm.spec
 

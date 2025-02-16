@@ -2,8 +2,8 @@
 
 PACKAGENAME=$1
 
-if [ ! -f /opt/$BASEPATH_DIR/versions/deps/python-$PACKAGENAME.spec ]; then
-	if [ ! -f /opt/$BASEPATH_DIR/versions/deps/python3-$PACKAGENAME.spec ]; then
+if [ ! -f $BASEPATH_DIR/versions/deps/python-$PACKAGENAME.spec ]; then
+	if [ ! -f $BASEPATH_DIR/versions/deps/python3-$PACKAGENAME.spec ]; then
 		echo "Package $PACKAGENAME doesn't exist"
 		exit 0
 	else
@@ -28,10 +28,10 @@ done
 AFTER="$AFTER%endif\n"
 AFTER="$AFTER# END RENAMING OF BINARIES 2\n"
 
-sed -i "/# START RENAMING OF BINARIES 1/,/# END RENAMING OF BINARIES 1/d" /opt/$BASEPATH_DIR/versions/deps/$FILENAME.spec
-sed -i "/# START RENAMING OF BINARIES 2/,/# END RENAMING OF BINARIES 2/d" /opt/$BASEPATH_DIR/versions/deps/$FILENAME.spec
+sed -i "/# START RENAMING OF BINARIES 1/,/# END RENAMING OF BINARIES 1/d" $BASEPATH_DIR/versions/deps/$FILENAME.spec
+sed -i "/# START RENAMING OF BINARIES 2/,/# END RENAMING OF BINARIES 2/d" $BASEPATH_DIR/versions/deps/$FILENAME.spec
 
-sed -i "/%pyproject_save_files/i $BEFORE" /opt/$BASEPATH_DIR/versions/deps/$FILENAME.spec
-sed -i "/%pyproject_save_files/a $AFTER" /opt/$BASEPATH_DIR/versions/deps/$FILENAME.spec
+sed -i "/%pyproject_save_files/i $BEFORE" $BASEPATH_DIR/versions/deps/$FILENAME.spec
+sed -i "/%pyproject_save_files/a $AFTER" $BASEPATH_DIR/versions/deps/$FILENAME.spec
 
-/opt/$BASEPATH_DIR/scripts/buildsrc $FILENAME
+$BASEPATH_DIR/scripts/buildsrc $FILENAME

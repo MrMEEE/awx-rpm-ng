@@ -1,7 +1,7 @@
 #!/bin/bash
 
-/opt/$BASEPATH_DIR/scripts/buildsrc force
-cd /opt/$BASEPATH_DIR/versions
+$BASEPATH_DIR/scripts/buildsrc force
+cd $BASEPATH_DIR/versions
 git add deps
 git commit -qam "Source Built"
 git push

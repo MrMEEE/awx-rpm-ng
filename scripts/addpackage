@@ -29,7 +29,7 @@ if [[ "$BUILDSRC" == "1" ]];then
 fi
 
 if [[ $PACKAGEVERSION == "" ]];then
-	echo "$PACKAGE" >> /opt/$BASEPATH_DIR/versions/deps/extra-deps.txt
+	echo "$PACKAGE" >> $BASEPATH_DIR/versions/deps/extra-deps.txt
 else
-	echo "$PACKAGE==$PACKAGEVERSION" >> /opt/$BASEPATH_DIR/versions/deps/extra-deps.txt
+	echo "$PACKAGE==$PACKAGEVERSION" >> $BASEPATH_DIR/versions/deps/extra-deps.txt
 fi
