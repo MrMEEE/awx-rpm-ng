@@ -99,6 +99,9 @@ for i in `ls $BASEPATH_DIR/rpmbuilds/$VERSION/SRPMS/`;do
 					echo "    $MODULE"
 				fi
 			done
+			if [[ `grep "ambiguous python shebang" $BASEPATH_DIR/versions/logs/$i.log |wc -l` > 0 ]]; then
+			        echo "  Ambiguous Python detected, run $BASEPATH_DIR/scripts/fixpythonshebangs $(get_packagename $PACKAGE)"
+			fi
 			if [[ `grep "Empty %files file" $BASEPATH_DIR/versions/logs/$i.log | grep "debugsourcefiles.list" |wc -l` > 0 ]]; then
 				echo "  Debuginfo couldn't be generated, run $BASEPATH_DIR/scripts/removedebuginfo $(get_packagename $PACKAGE)"
 			fi

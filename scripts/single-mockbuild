@@ -4,15 +4,13 @@ source $(dirname "$0")/common-functions
 
 VERSION=$(get_version)
 
-ARG1=$1
-ARG2=$2
-
-RPMPACKAGE=$1
-
 if [ ! -d "$BASEPATH_DIR/versions/deps" ]; then
         echo "SPECs for version $VERSION not generated"
         exit 1
 fi
+
+
+for RPMPACKAGE in $@; do
 
 if [ ! -f "$BASEPATH_DIR/rpmbuilds/$VERSION/SRPMS/$RPMPACKAGE" ];then
 	SRPMALT=$(echo $SRPM |sed 's/python/python3/g')
@@ -24,9 +22,13 @@ if [ ! -f "$BASEPATH_DIR/rpmbuilds/$VERSION/SRPMS/$RPMPACKAGE" ];then
 	fi
 fi
 
+done
+
 mkdir -p "$BASEPATH_DIR/rpmbuilds/$VERSION/RPMS/"
 
 cd "$BASEPATH_DIR/rpmbuilds/$VERSION/RPMS/"
+
+for RPMPACKAGE in $@; do
 
 mock -r epel-9-x86_64 --clean &> /dev/null 
 
@@ -36,3 +38,4 @@ NC='\033[0m' # No Color
 
 build_rpm $RPMPACKAGE
 
+done

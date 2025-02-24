@@ -4,6 +4,11 @@ PACKAGENAME=$1
 DEPENDENCY=$2
 WHERE=$3
 
+source $(dirname "$0")/common-functions
+
+PYTHONBUILD=$(get_python)
+VERSION=$(get_version)
+
 if [ ! -f $BASEPATH_DIR/versions/deps/python-$PACKAGENAME.spec ]; then
 	if [ ! -f $BASEPATH_DIR/versions/deps/python3-$PACKAGENAME.spec ]; then
 		echo "Package $PACKAGENAME doesn't exist"
@@ -23,6 +28,7 @@ fi
 if [[ "${WHERE}" != both ]] && [[ "${WHERE}" != build ]] && [[ "${WHERE}" != runtime ]] ; then
         echo "Please specify where to add the dependency"
 	echo "Either 'build', 'run' or 'both'"
+	exit 3
 fi	
 
 if [[ "${WHERE}" == both ]] || [[ "${WHERE}" == build ]]; then

@@ -32,7 +32,7 @@ git add $BASEPATH_DIR/versions/awx-rpm
 
 echo "Publishing Package build changes"
 git commit -qam "Publishing build changes for version: `cat $BASEPATH_DIR/working-version`" &> /dev/null 
-git push &> /dev/null
+git push origin -q --all &> /dev/null
 
 if [[ "$VERSION" == "save" ]]; then
 	exit 0

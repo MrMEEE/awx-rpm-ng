@@ -3,6 +3,8 @@
 SCRIPTS_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 BASEPATH_DIR=$(echo $SCRIPTS_DIR | rev | cut -f2- -d/ | rev)
 
+mkdir -p $BASEPATH_DIR/versions/awx-rpm
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color

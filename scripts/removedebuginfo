@@ -1,6 +1,10 @@
 #!/bin/bash
 
 PACKAGENAME=$1
+source $(dirname "$0")/common-functions
+
+PYTHONBUILD=$(get_python)
+VERSION=$(get_version)
 
 if [ ! -f $BASEPATH_DIR/versions/deps/python-$PACKAGENAME.spec ]; then
 	if [ ! -f $BASEPATH_DIR/versions/deps/python3-$PACKAGENAME.spec ]; then
